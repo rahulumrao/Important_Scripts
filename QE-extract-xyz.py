@@ -27,7 +27,6 @@ for i in range (len(rline)):
     if "ATOMIC_POSITIONS (angstrom)" in rline[i]:
         start.append(i+1)
         for m in range (start[-1],len(rline)):
-#            if "Writing output" in rline[m]:
             if "Writing " in rline[m]:    
                 end.append(m-3)
                 break
