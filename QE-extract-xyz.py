@@ -11,7 +11,7 @@ end = []
 
 #Reading QE oufilename as an argument from the same line
 file =  sys.argv[1]
-# Open a file as outfile-traj.xyz to write xyz 
+# Open a file as outfile-traj.xyz to write xyz
 nwfile = os.path.splitext(file)[0] + "-traj.xyz"
 
 oldfile = open(file,"r")
@@ -27,11 +27,14 @@ for i in range (len(rline)):
     if "ATOMIC_POSITIONS (angstrom)" in rline[i]:
         start.append(i+1)
         for m in range (start[-1],len(rline)):
-            if "Writing " in rline[m]:    
+            if "Writing " in rline[m]:
                 end.append(m-3)
                 break
 #print(start)
 #print(end)
+
+j = len(start)-1
+end[j] = end[j]-1
 
 # Writing the extracted coordinates in a formatted xyz format
 for i,iStart in enumerate(start):
@@ -41,7 +44,6 @@ for i,iStart in enumerate(start):
     for line in rline[start[i] : end[i]]:
         words = line.split()
         newfile.write("{:10}  {:}\n".format(words[0],line[7:-1]))
-
 oldfile.close()
 newfile.close()
 #end of the program
