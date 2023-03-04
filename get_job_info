@@ -1,0 +1,27 @@
+#!/bin/bash
+#!-------------------------------------------------------------------------
+#! extract the path of current running jobs from SLURM job scheduler
+#! to run : chmod 755 get_job_info 
+#! Written by : Rahul Verma (vrahul@iitk.ac.in)
+#!-------------------------------------------------------------------------
+
+# get the username and extract the current running job details and storing in |tmp| file
+
+user=`echo $USER`
+squeue -u $user > tmp
+
+# passing the tmp file and cheking jobID status, line-by-line and storing in another file |tmp2| 
+#
+while read -r rec1 rec2
+do
+  arr=`echo "$rec1"`
+  scontrol show job $arr >> tmp2
+
+done < <(cut -d "," -f1,1 tmp | tail -n +2)
+
+# Finally grep the jobID and the corresponding path
+
+egrep --color='auto' 'JobId=|WorkDir=' tmp2
+
+# removing temp. files
+rm tmp tmp2
